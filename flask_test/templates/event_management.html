@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Event Management</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Event Management</h2>
+        <form action="/event-management" method="post">
+            <div class="form-group">
+                <label for="event-name">Event Name:</label>
+                <input type="text" id="event-name" name="event-name" maxlength="100" required>
+            </div>
+            <div class="form-group">
+                <label for="event-description">Event Description:</label>
+                <textarea id="event-description" name="event-description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <textarea id="location" name="location" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="required-skills">Required Skills:</label>
+                <select id="required-skills" name="required-skills" multiple required>
+                    <option value="skill1">Skill 1</option>
+                    <option value="skill2">Skill 2</option>
+                    <!-- Add other skills here -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="urgency">Urgency:</label>
+                <select id="urgency" name="urgency" required>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="event-date">Event Date:</label>
+                <input type="date" id="event-date" name="event-date" required>
+            </div>
+            <button type="submit">Create Event</button>
+        </form>
+    </div>
+</body>
