@@ -5,13 +5,13 @@ from flask import (
 )
 from flask import request
 
+# Data structure
 emails_pws = {
     "123@g.com": {"pw": "1234", "admin": 1, "match_result": None},#admin
     "321@g.com": {"pw": "1234", "admin": 0, "match_result": None},#volunteer
 }
-
-# Sample events data structure
 events = []
+users = []
 
 # Create the application instance
 app = Flask(__name__, template_folder="templates")
@@ -101,51 +101,54 @@ def profile():
 
 @app.route('/profile', methods = ['POST'])
 def update_profile():
-    fullname = request.form.get('fullname')
+    fullname = request.form.get('full-name')
     address1 = request.form.get('address1')
     address2 = request.form.get('address2')
     city = request.form.get('city')
     state = request.form.get('state')
-    zipcode = request.form.get('zipcode')
-    skills = request.form.getlist('required-skills')
-    preferences = request.form.getlist('required-preferences')
+    zipcode = request.form.get('zip')
+    skills = request.form.getlist('skills')
+    preferences = request.form.getlist('preferences')
     availability = request.form.get('availability')
 
-    print(fullname)
-    print(address1)
-    print(address2)
-    print(city)
-    print(state)
-    print(zipcode)
-    print(skills)
-    print(preferences)
-    print(availability)
+    new_user = {
+
+        "fullname": fullname,
+        "address1": address1,
+        "address2": address2,
+        "city": city,
+        "state": state,
+        "zipcode": zipcode,
+        "skills": skills,
+        "preferences": preferences,
+        "availability": availability
+    }
+    print(new_user)
+
+    users.append(new_user)
     return "updated successfully"
 
 @app.route('/volunteer_history.html')
 def volunteer_history():
     return render_template('volunteer_history.html')
 
-@app.route('/volunteer_matching.html', methods = ['POST'])
+@app.route('/volunteer_matching.html', methods = ['GET'])
 def volunteer_matching():
     match_result = None
-    if request.method == 'POST':
-        volunteer_email = request.form.get('volunteer_email')
-        event_id = int(request.form.get('event_id'))
 
-        volunteer = emails_pws.get(volunteer_email, None)
-        event = next((e for e in events if e["id"] == event_id), None)
-
-        if volunteer and event:
-            if (set(event["skills"]).issubset(set(volunteer["skills"])) and
-                    event["location"] == volunteer["location"] and
-                    event["event-date"] == volunteer["availability"]):
-                match_result = f"Volunteer {volunteer_email} matches the event '{event['name']}' requirements successfully!"
+    for event in events:
+        for user in users:
+            print(user)
+            print(event)
+            if (set(event["skills"]).issubset(set(user["skills"])) and
+                    event["location"] == user["city"] and
+                    event["date"] == user["availability"]):
+                match_result = f"Volunteer {user['fullname']} matches the event '{event['name']}' requirements successfully!"
             else:
                 match_result = "Volunteer does not match the event requirements."
-        else:
-            match_result = "Volunteer or event not found."
-        emails_pws[volunteer_email]["match_result"] = match_result
+        #else:
+           #match_result = "Volunteer or event not found."
+            #emails_pws[volunteer_email]["match_result"] = match_result
     return render_template('volunteer_matching.html', match_result=match_result)
 
 
