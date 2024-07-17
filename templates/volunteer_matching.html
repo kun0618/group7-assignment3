@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Volunteer Matching</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Volunteer Matching</h2>
+        <form action="/volunteer-matching" method="post">
+            <div class="form-group">
+                <label for="volunteer-name">Volunteer Name:</label>
+                <input type="text" id="volunteer-name" name="volunteer-name" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="matched-event">Matched Event:</label>
+                <input type="text" id="matched-event" name="matched-event" readonly>
+            </div>
+            <button type="submit">Match Volunteer</button>
+        </form>
+        <div class="match-result">
+            <h3>Match Result</h3>
+            {% if match_result %}
+                <p>{{ match_result }}</p>
+            {% else %}
+                <p>No match results yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</body>
+</html>

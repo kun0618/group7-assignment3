@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Event Information</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Event Information</h2>
+        {% if events %}
+            <ul>
+                {% for event in events %}
+                    <li>
+                        <h3>{{ event.name }}</h3>
+                        <p>{{ event.description }}</p>
+                        <p>Location: {{ event.location }}</p>
+                        <p>Skills Required: {{ event.skills | join(', ') }}</p>
+                        <p>Urgency: {{ event.urgency }}</p>
+                        <p>Date: {{ event.date }}</p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No events available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
