@@ -12,7 +12,8 @@
 
 2. In the admin account:
 
-1) Display the event information on the event_information.html page after the admin inputs the event details on event_management.html page.
+
+ 1） Display the event information on the event_information.html page after the admin inputs the event details on event_management.html page.
 
 
   When the volunteer edit his profile, print information in python.
