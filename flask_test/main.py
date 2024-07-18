@@ -5,6 +5,8 @@ from flask import (
 )
 from flask import request
 
+from price_module import PricingModule
+
 # Data structure
 emails_pws = {
     "123@g.com": {"pw": "1234", "admin": 1, "match_result": None},#admin
@@ -151,6 +153,9 @@ def volunteer_matching():
             #emails_pws[volunteer_email]["match_result"] = match_result
     return render_template('volunteer_matching.html', match_result=match_result)
 
+
+# Instance of PricingModule for future use
+pricing_module = PricingModule()
 
 
 
