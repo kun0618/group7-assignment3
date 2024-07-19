@@ -2,9 +2,8 @@ import unittest
 from flask import Flask
 from flask.testing import FlaskClient
 
-# Import the application instance
-from flask import app, emails_pws, events, users
-
+# Import the application instance from the main module
+from app.main import app, emails_pws, events, users
 
 class FlaskAppTests(unittest.TestCase):
 
