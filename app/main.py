@@ -5,7 +5,7 @@ from flask import (
 )
 from flask import request
 
-from price_module import PricingModule
+from app.price_module import PricingModule
 
 # Data structure
 emails_pws = {
