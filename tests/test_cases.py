@@ -7,15 +7,6 @@ class FlaskAppTests(unittest.TestCase):
         self.client = app.test_client()
         self.client.testing = True
 
-        # Reset the data to ensure test isolation
-        global emails_pws, events, users
-        emails_pws = {
-            "123@g.com": {"pw": "1234", "admin": 1, "match_result": None},
-            "321@g.com": {"pw": "1234", "admin": 0, "match_result": None},
-        }
-        events = []
-        users = []
-
     def test_home_page(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
@@ -90,12 +81,13 @@ class FlaskAppTests(unittest.TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.location, 'http://localhost/event_information.html')
 
-    def test_event_information_page(self):
+    def test_event_information_page_no_events(self):
         response = self.client.get('/event_information.html')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Event Information', response.data)
         self.assertIn(b'No events available.', response.data)
 
+    def test_event_information_page_with_events(self):
         self.client.post('/event_management', data={
             'event-name': 'Test Event',
             'event-description': 'Description of test event',
@@ -136,11 +128,13 @@ class FlaskAppTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'updated successfully', response.data)
 
-    def test_volunteer_matching_page(self):
+    def test_volunteer_matching_page_no_matches(self):
         response = self.client.get('/volunteer_matching.html')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Match Result', response.data)
+        self.assertIn(b'Volunteer does not match the event requirements.', response.data)
 
+    def test_volunteer_matching_page_with_matches(self):
         self.client.post('/event_management', data={
             'event-name': 'Test Event',
             'event-description': 'Description of test event',
@@ -164,6 +158,20 @@ class FlaskAppTests(unittest.TestCase):
 
         response = self.client.get('/volunteer_matching.html')
         self.assertIn(b"Volunteer John Doe matches the event 'Test Event' requirements successfully!", response.data)
+
+    def test_event_management_with_empty_fields(self):
+        response = self.client.post('/event_management', data={
+            'event-name': '',
+            'event-description': '',
+            'location': '',
+            'required-skills': [],
+            'urgency': '',
+            'event-date': ''
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.location, 'http://localhost/event_information.html')
+        # Ensure no empty event is added
+        self.assertNotIn({'name': '', 'description': '', 'location': '', 'skills': [], 'urgency': '', 'date': ''}, events)
 
 if __name__ == '__main__':
     unittest.main()
